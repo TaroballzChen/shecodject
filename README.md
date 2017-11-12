@@ -1,4 +1,4 @@
-# shecodject (Shellcode inject)
+# shecodject (shellcode inject)
 shecodject is a autoscript for shellcode injection by Python3 programing
 
 shecoject是一個由python3編寫的工具，可將客製metasploit生成的raw檔直接使用pyinstaller封裝或是您也可使用本工具生成普通的raw檔再進行封裝。
