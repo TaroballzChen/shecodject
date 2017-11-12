@@ -41,7 +41,7 @@ $ python3 setup.py
 $ python3 shecodeject.py
 ```
 # Reference
-https://github.com/curtis992250/shellcodeinject_regwrite_persistence/blob/master/reg_shellcode.py
-https://github.com/Mr-Un1k0d3r/DKMC
-https://www.youtube.com/watch?v=rjKEoBfdboo
-https://www.youtube.com/watch?v=w4BuXu344mU&t=638s
+* https://github.com/curtis992250/shellcodeinject_regwrite_persistence/blob/master/reg_shellcode.py
+* https://github.com/Mr-Un1k0d3r/DKMC
+* https://www.youtube.com/watch?v=rjKEoBfdboo
+* https://www.youtube.com/watch?v=w4BuXu344mU&t=638s
