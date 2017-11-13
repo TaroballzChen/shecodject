@@ -13,7 +13,7 @@ class Moduleobject:
     def show_vars(self):
         print ('The value you have to set\n')
         for value,key in self.values.items():
-            print('[*] %s\t\t >>> %s'%(value,key))
+            print('\033[94m'+'[+]'+'\033[0m'+value.ljust(12,' ') +'>>>'.center(10,' ')+'%s'%key)
 
     def show_menu(self):
         self.show_vars()
