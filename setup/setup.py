@@ -1,10 +1,16 @@
 import os
 
-os.system('dpkg --add-architecture i386 && apt-get update && apt-get install wine32')
 os.system('sudo apt-get update')
-os.system('sudo apt-get install wine')
-os.system('sudo apt-get install winetricks')
-os.system('pip install distorm3')
-os.system('WINEPREFIX="$HOME/prefix32" WINEARCH=win32 wine wineboot')
-os.system('WINEPREFIX="$HOME/prefix32"  wine msiexec /i python-3.4.3.msi')
-os.system('WINEPREFIX="$HOME/prefix32" wine /root/prefix32/drive_c/Python34/python.exe /root/prefix32/drive_c/Python34/Scripts/pip.exe install pyinstaller')
+os.system("sudo apt-get install -y python3-pip")
+os.system("pip3 install pyinstaller")
+os.system('pip3 install distorm3')
+os.system("curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -")
+os.system("echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' | sudo tee /etc/apt/sources.list.d/docker.list")
+os.system("sudo apt-get update")
+os.system("sudo apt-get remove docker docker-engine docker.io")
+os.system("sudo apt-get -y install docker-ce")
+os.system("sudo systemctl start docker")
+os.system("sudo systemctl enable docker")
+os.system("sudo usermod -aG docker $USER")
+os.system("docker pull cdrx/pyinstaller-windows:python3-32bit")
+

@@ -22,7 +22,7 @@ class obshellcode(Moduleobject):
 
     def run_action(self):
         if os.path.isfile(self.values['source']):
-            os.system('python ./module/x86obf.py -i %s -o %s -r %s -p %s -f %s'
+            os.system('python3 ./module/x86obf.py -i %s -o %s -r %s -p %s -f %s'
                       %(self.values['source'],
                         self.values['ob_output'],
                         self.values['range'],

@@ -913,31 +913,30 @@ def print_disasm(sl):
 			#	print 'label:', i.label, 'jmp_label:', i.jmp_label
 			l = distorm3.Decode(ioff, i.bytes, distorm3.Decode32Bits)
 			for (offset, size, instr, hexdump) in l:
-				print '%-4i %.8x: %-32s %s' % (ni, offset, hexdump, instr)
+				print ('%-4i %.8x: %-32s %s' % (ni, offset, hexdump, instr))
 				ni += 1
 				ioff += size
 		else:
-			print '%-4i %.8x:' % (ni, ioff),
+			print ('%-4i %.8x:' % (ni, ioff),)
 			print_string_hex(i.bytes)
-			print ''
+			print ('')
 			ioff += i.size
 
 def print_debug(sl):
 
 	offset = 0
 	for i in sl:
-		print '%08x:' % (offset),
-		print_string_hex(i.bytes)
+		print ('%08x:' % (offset),print_string_hex(i.bytes))
 		if i.label > -1:
-			print 'label:', i.label
+			print ('label:', i.label)
 		if i.jmp_label > -1:
-			print 'jmp_to:', i.jmp_label,
-		print ''
+			print ('jmp_to:', i.jmp_label,)
+		print ('')
 		offset += i.size
 
 def print_string_hex(str):
 	for c in str:
-		print "%02x" % ord(c),
+		print ("%02x" % ord(c),)
 
 def parse_args():
 	parser = argparse.ArgumentParser()
@@ -957,15 +956,15 @@ def main():
 	sl = load_shell(shbin, args.range)
 	print_disasm(sl)
 	fix_shell(sl)
-	print ''
+	print ('')
 	for i in range(1,args.passes+1):
-		print 'Obfuscation pass:', i
+		print ('Obfuscation pass:', )
 		do_obfuscate(sl)
 	
 	if args.mixflow > 0:
 		sl = do_mangle_flow(sl, args.mixflow)
 
-	print ''
+	print ('')
 	print_disasm(sl)
 
 	obin = write_shell(sl)
